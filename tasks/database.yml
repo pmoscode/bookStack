@@ -1,0 +1,22 @@
+---
+- name: Install MySql database package
+  apt:
+    name: "{{ mysql_version }}"
+    state: present
+
+- name: Create initial BookStack MySql database
+  mysql_db:
+    name: "{{ bs_db_name }}"
+    encoding: utf8
+    state: present
+    login_user: "{{ bs_db_root_user }}"
+    login_password: "{{ bs_db_root_password }}"
+
+- name: Create BookStack MySQL database user
+  mysql_user:
+    name: "{{ bs_db_user }}"
+    password: "{{ bs_db_password }}"
+    priv: "{{ bs_db_name }}.*:ALL,GRANT"
+    state: present
+    login_user: "{{ bst_mysql_root }}"
+    login_password: "{{ def_mysql_pass }}"

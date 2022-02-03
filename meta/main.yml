@@ -1,0 +1,25 @@
+galaxy_info:
+  role_name: book_stack
+  namespace: pmoscode
+
+  author: pmoscode
+  description: Role which installs BookStack - a simple, self-hosted, easy-to-use platform for organising and storing information..
+
+  license: MIT
+
+  min_ansible_version: 2.1
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - bionic
+
+  galaxy_tags:
+    - ubuntu
+    - debian
+    - bookstack
+    - wiki
+    - knowledge
+
+dependencies: []

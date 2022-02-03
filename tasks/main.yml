@@ -1,0 +1,96 @@
+---
+- name: Check if we are on ubuntu
+  fail:
+    msg: "This role works only for Ubuntu distribution"
+  when: ansible_distribution | lower != "ubuntu"
+
+- name: Get local IP
+  set_fact:
+    local_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+- include_tasks: prerequisites_bionic.yml
+  when: ansible_distribution_release | lower == "bionic"
+
+- include_tasks: prerequisites_focal.yml
+  when: ansible_distribution_release | lower == "focal"
+
+- name: Update apt
+  apt:
+    update_cache: yes
+
+- include_tasks: database.yml
+  when: bs_db_install
+
+- name: "Download BookStack from git to: {{ bs_install_root_dir }}"
+  git:
+    repo: https://github.com/BookStackApp/BookStack.git
+    version: release
+    dest: "{{ bs_install_root_dir }}"
+    update: true
+
+- name: "Download composer"
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/installer
+    checksum: "sha384:https://composer.github.io/installer.sig"
+
+- name: "Run Installer"
+  command: php /tmp/installer --quiet
+
+- name: Move composer to /usr/local/bin
+  copy:
+    src: /tmp/composer.phar
+    dest: /usr/local/bin/composer
+    remote_src: yes
+    mode: 0755
+
+- name: Install composer
+  command: php /usr/local/bin/composer install --no-dev --no-plugins
+  environment:
+    - COMPOSER_ALLOW_SUPERUSER=1
+
+- name: Deploy .env file
+  template:
+    src: .env.j2
+    dest: "{{ bs_install_dir }}/.env"
+    owner: www-data
+    group: www-data
+    mode: 0640
+
+- name: Generate application ey
+  command:
+    cmd: php artisan key:generate --no-interaction --force
+    chdir: "{{ bs_install_dir }}"
+
+- name: Set permission on folders
+  file:
+    path: "{{ bs_install_dir }}"
+    recurse: yes
+    owner: www-data
+    group: www-data
+    mode: 0755
+
+- name: Setup Apache
+  command: "{{ item }}"
+  loop:
+    - a2enmod rewrite
+    - a2enmod php7.4
+
+- name: Copy apache site config
+  template:
+    src: apache.bookstack.conf.j2
+    dest: /etc/apache2/sites-available/bookstack.conf
+    mode: 0755
+
+- name: Disable apache default site and enable bookstack site
+  command: "{{ item }}"
+  loop:
+    - a2dissite 000-default.conf
+    - a2ensite bookstack.conf
+  notify: restart apache
+
+- name: Migrate database
+  command:
+    cmd: php artisan migrate --force
+    chdir: "{{ bs_install_dir }}"
+  changed_when: false

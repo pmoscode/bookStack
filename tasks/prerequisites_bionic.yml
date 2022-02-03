@@ -1,0 +1,36 @@
+---
+#- name: Make sure universe repository is enabled
+#  apt_repository:
+#    repo: deb http://archive.ubuntu.com/ubuntu bionic universe
+#    state: present
+#    update_cache: True
+
+- name: Make sure ppa:ondrej/php repository is enabled
+  apt_repository:
+    repo: ppa:ondrej/php
+    state: present
+    update_cache: True
+
+- name: Install required packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - git
+      - apache2
+      - php7.4
+      - curl
+      - php7.4-fpm
+      - php7.4-curl
+      - php7.4-mbstring
+      - php7.4-ldap
+      - php7.4-xml
+      - php7.4-zip
+      - php7.4-gd
+      - php7.4-mysql
+      - libapache2-mod-php7.4
+
+- name: Set MySql version to install
+  set_fact:
+    mysql_version: mysql-server-5.7

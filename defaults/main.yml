@@ -1,0 +1,13 @@
+---
+bs_domain: localhost
+bs_default_language: en
+bs_db_install: yes
+bs_db_host: localhost
+bs_db_name: bookstack
+bs_db_root_user: root
+bs_db_root_password: verysecret
+bs_db_user: bookstack
+bs_db_password: verysecret
+bs_timezone: UTC
+bs_max_file_upload: 50
+bs_log_failed_login: true
