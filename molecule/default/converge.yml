@@ -3,5 +3,5 @@
   hosts: all
 
   roles:
-#    - role: pmoscode.book_stack
-    - role: bookStack
+    - role: pmoscode.book_stack
+#    - role: bookStack

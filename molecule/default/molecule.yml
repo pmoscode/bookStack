@@ -11,7 +11,7 @@ scenario:
     - converge
     - idempotence
     - side_effect
-    #- verify
+    - verify
     - destroy
 dependency:
   name: galaxy
