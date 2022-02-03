@@ -8,15 +8,15 @@
   set_fact:
     local_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 
+- name: Update apt
+  apt:
+    update_cache: yes
+
 - include_tasks: prerequisites_bionic.yml
   when: ansible_distribution_release | lower == "bionic"
 
 - include_tasks: prerequisites_focal.yml
   when: ansible_distribution_release | lower == "focal"
-
-- name: Update apt
-  apt:
-    update_cache: yes
 
 - include_tasks: database.yml
   when: bs_db_install
