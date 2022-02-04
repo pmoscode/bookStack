@@ -4,6 +4,11 @@
     name: "{{ mysql_version }}"
     state: present
 
+- name: Start MySql server
+  service:
+    name: mysql
+    state: started
+
 - name: Install PyMySQL Python lib
   pip:
     name:
