@@ -4,6 +4,12 @@
     name: "{{ mysql_version }}"
     state: present
 
+- name: Install PyMySQL Python lib
+  pip:
+    name:
+      - PyMySQL
+    state: present
+
 - name: Create initial BookStack MySql database
   mysql_db:
     name: "{{ bs_db_name }}"
