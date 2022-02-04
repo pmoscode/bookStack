@@ -8,9 +8,12 @@
   set_fact:
     local_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 
-- name: Update apt
+- name: Apt install dirmngr and update cache
   apt:
+    name:
+      - dirmngr
     update_cache: yes
+    state: present
 
 - include_tasks: prerequisites_bionic.yml
   when: ansible_distribution_release | lower == "bionic"

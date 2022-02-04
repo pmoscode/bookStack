@@ -1,7 +1,13 @@
 ---
-- name: Make sure universe repository is enabled
+#- name: Make sure universe repository is enabled
+#  apt_repository:
+#    repo: deb http://archive.ubuntu.com/ubuntu bionic universe
+#    state: present
+#    update_cache: True
+
+- name: Make sure ppa:ondrej/php repository is enabled
   apt_repository:
-    repo: deb http://archive.ubuntu.com/ubuntu bionic universe
+    repo: ppa:ondrej/php
     state: present
     update_cache: True
 
@@ -25,12 +31,6 @@
       - php7.4-gd
       - php7.4-mysql
       - libapache2-mod-php7.4
-
-- name: Make sure ppa:ondrej/php repository is enabled
-  apt_repository:
-    repo: ppa:ondrej/php
-    state: present
-    update_cache: True
 
 - name: Set MySql version to install
   set_fact:
