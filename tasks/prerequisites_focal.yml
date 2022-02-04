@@ -9,6 +9,7 @@
       - apache2
       - php7.4
       - curl
+      - dirmngr
       - php7.4-fpm
       - php7.4-curl
       - php7.4-mbstring
