@@ -43,7 +43,9 @@
     #checksum: "sha384:https://composer.github.io/installer.sig"
 
 - name: "Run Installer"
-  command: php /tmp/installer --quiet
+  command: php installer --quiet
+  args:
+    chdir: /tmp/
 
 - name: Move composer to /usr/local/bin
   copy:
