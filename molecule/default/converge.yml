@@ -2,9 +2,24 @@
 - name: Converge
   hosts: all
 
-  roles:
-    - role: pmoscode.book_stack
-#    - role: bookStack
-      vars:
-        bs_db_root_password: securepwd
-        bs_db_password: verysecret
+  vars:
+    bs_db_root_password: securepwd
+    bs_db_password: verysecret
+
+  tasks:
+    - block:
+        - include_role:
+            name: pmoscode.book_stack
+      rescue:
+        - shell: systemctl status apache2
+          register: out_sysctl
+        - debug:
+            var: out_sysctl
+
+
+#  roles:
+#    - role: pmoscode.book_stack
+##    - role: bookStack
+#      vars:
+#        bs_db_root_password: securepwd
+#        bs_db_password: verysecret
