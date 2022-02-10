@@ -23,6 +23,7 @@
     password: "{{ bs_db_root_password }}"
     priv: '*.*:ALL,GRANT'
     check_implicit_admin: true
+    update_password: always
   loop: "{{ bs_db_hosts }}"
 
 - name: Create initial BookStack MySql database
