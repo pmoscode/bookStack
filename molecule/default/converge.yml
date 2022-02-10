@@ -10,6 +10,8 @@
     - block:
         - include_role:
             name: pmoscode.book_stack
+        - name: Flush handlers
+          meta: flush_handlers
       rescue:
         - shell: systemctl status apache2
           register: out_sysctl
