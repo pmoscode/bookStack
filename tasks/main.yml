@@ -33,7 +33,7 @@
   git:
     repo: https://github.com/BookStackApp/BookStack.git
     version: release
-    dest: "{{ bs_install_root_dir }}"
+    dest: "{{ bs_install_dir }}"
     update: true
 
 - name: "Download composer"
