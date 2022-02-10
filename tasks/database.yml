@@ -39,7 +39,7 @@
     password: "{{ bs_db_password }}"
     priv: "{{ bs_db_name }}.*:ALL,GRANT"
     state: present
-    login_user: "{{ bs_mysql_root }}"
+    login_user: "{{ bs_db_root_user }}"
     login_password: "{{ bs_db_root_password }}"
 
 - name: Create `/root/.my.cnf` with root password credentials
