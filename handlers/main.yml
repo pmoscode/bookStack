@@ -3,3 +3,8 @@
   systemd:
     name: apache2
     state: restarted
+
+- name: Restart MySQL
+  systemd:
+    name: mysql
+    state: restarted
