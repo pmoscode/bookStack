@@ -54,13 +54,6 @@
     remote_src: yes
     mode: 0755
 
-- name: Get info
-  shell: "ls -lrt {{ bs_install_root_dir }}"
-  register: out_debug
-
-- debug:
-    var: out_debug
-
 - name: Install app with composer
   composer:
     command: install
@@ -78,7 +71,7 @@
     group: www-data
     mode: 0640
 
-- name: Generate application ey
+- name: Generate application key
   command:
     cmd: php artisan key:generate --no-interaction --force
     chdir: "{{ bs_install_dir }}"
@@ -91,24 +84,7 @@
     group: www-data
     mode: 0755
 
-- name: Setup Apache
-  command: "{{ item }}"
-  loop:
-    - a2enmod rewrite
-    - a2enmod php7.4
-
-- name: Copy apache site config
-  template:
-    src: apache.bookstack.conf.j2
-    dest: /etc/apache2/sites-available/bookstack.conf
-    mode: 0755
-
-- name: Disable apache default site and enable bookstack site
-  command: "{{ item }}"
-  loop:
-    - a2dissite 000-default.conf
-    - a2ensite bookstack.conf
-  notify: restart apache
+- include_tasks: apache.yml
 
 - name: Migrate database
   command:

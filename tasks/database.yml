@@ -3,6 +3,7 @@
   apt:
     name: "{{ mysql_version }}"
     state: present
+  register: out_mysql_stat
 
 - name: Start MySql server
   service:
@@ -15,38 +16,40 @@
       - PyMySQL
     state: present
 
-- name: Ensure mysql root password is updated for all root accounts
-  mysql_user:
-    name: root
-    host: "{{ item }}"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    password: "{{ bs_db_root_password }}"
-    priv: '*.*:ALL,GRANT'
-    check_implicit_admin: true
-    update_password: always
-  loop: "{{ bs_db_hosts }}"
+- block:
+  - name: Ensure mysql root password is updated for all root accounts
+    mysql_user:
+      name: root
+      host: "{{ item }}"
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      password: "{{ bs_db_root_password }}"
+      priv: '*.*:ALL,GRANT'
+      check_implicit_admin: true
+      update_password: always
+    loop: "{{ bs_db_hosts }}"
 
-- name: Create `/root/.my.cnf` with root password credentials
-  template:
-    src:  my.cnf.j2
-    dest: /root/.my.cnf
-    owner: root
-    mode: 0600
-  notify: Restart MySQL
+  - name: Create `/root/.my.cnf` with root password credentials
+    template:
+      src:  my.cnf.j2
+      dest: /root/.my.cnf
+      owner: root
+      mode: 0600
+    notify: Restart MySQL
 
-- name: Create initial BookStack MySql database
-  mysql_db:
-    name: "{{ bs_db_name }}"
-    encoding: utf8
-    state: present
-    login_user: "{{ bs_db_root_user }}"
-    login_password: "{{ bs_db_root_password }}"
+  - name: Create initial BookStack MySql database
+    mysql_db:
+      name: "{{ bs_db_name }}"
+      encoding: utf8
+      state: present
+      login_user: "{{ bs_db_root_user }}"
+      login_password: "{{ bs_db_root_password }}"
 
-- name: Create BookStack MySQL database user
-  mysql_user:
-    name: "{{ bs_db_user }}"
-    password: "{{ bs_db_password }}"
-    priv: "{{ bs_db_name }}.*:ALL,GRANT"
-    state: present
-    login_user: "{{ bs_db_root_user }}"
-    login_password: "{{ bs_db_root_password }}"
+  - name: Create BookStack MySQL database user
+    mysql_user:
+      name: "{{ bs_db_user }}"
+      password: "{{ bs_db_password }}"
+      priv: "{{ bs_db_name }}.*:ALL,GRANT"
+      state: present
+      login_user: "{{ bs_db_root_user }}"
+      login_password: "{{ bs_db_root_password }}"
+  when: out_mysql_stat.changed

@@ -1,10 +1,4 @@
 ---
-#- name: Make sure universe repository is enabled
-#  apt_repository:
-#    repo: deb http://archive.ubuntu.com/ubuntu bionic universe
-#    state: present
-#    update_cache: True
-
 - name: Make sure ppa:ondrej/php repository is enabled
   apt_repository:
     repo: ppa:ondrej/php
