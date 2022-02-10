@@ -7,7 +7,7 @@ bs_db_name: bookstack
 bs_db_root_user: root
 bs_db_root_password:
 bs_db_user: bookstack
-bs_db_password: verysecret
+bs_db_password:
 bs_timezone: UTC
 bs_max_file_upload: 50
 bs_log_failed_login: true

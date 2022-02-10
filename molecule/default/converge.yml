@@ -5,3 +5,6 @@
   roles:
     - role: pmoscode.book_stack
 #    - role: bookStack
+      vars:
+        bs_db_root_password: securepwd
+        bs_db_password: verysecret

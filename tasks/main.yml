@@ -54,10 +54,14 @@
     remote_src: yes
     mode: 0755
 
-- name: Install composer
-  command: php /usr/local/bin/composer install --no-dev --no-plugins
+- name: Install app with composer
+  composer:
+    command: install
+    no_dev: true
+    no_plugins: true
+    working_dir: "{{ bs_install_dir }}"
   environment:
-    - COMPOSER_ALLOW_SUPERUSER=1
+    - COMPOSER_ALLOW_SUPERUSER: 1
 
 - name: Deploy .env file
   template:
