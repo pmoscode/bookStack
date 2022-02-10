@@ -24,6 +24,11 @@
 - include_tasks: database.yml
   when: bs_db_install
 
+- name: Remove install dir when exists
+  file:
+    path: "{{ bs_install_root_dir }}"
+    state: absent
+
 - name: "Download BookStack from git to: {{ bs_install_root_dir }}"
   git:
     repo: https://github.com/BookStackApp/BookStack.git
