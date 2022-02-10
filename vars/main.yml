@@ -1,6 +1,6 @@
 ---
 bs_install_root_dir: /var/www
-bs_install_dir: "{{ bs_install_root_dir }}/bookstack"
+bs_install_dir: "{{ bs_install_root_dir }}/BookStack"
 bs_db_hosts:
   - 127.0.0.1
   - localhost
