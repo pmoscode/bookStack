@@ -54,6 +54,13 @@
     remote_src: yes
     mode: 0755
 
+- name: Get info
+  shell: "ls -lrt {{ bs_install_root_dir }}"
+  register: out_debug
+
+- debug:
+    var: out_debug
+
 - name: Install app with composer
   composer:
     command: install
